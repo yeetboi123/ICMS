@@ -10,10 +10,12 @@
 
  [raw, ~, ~, ~]=read_Intan_RHS2000_file;
  clear amplifier_channels amp_settle_data charge_recovery_data compliance_limit_data stim_data t 
+ 
  %%  2. Channel mean subtraction 
  
  mean_sg = mean(raw);
  raw = raw - mean_sg; clear mean_sg
+ 
  %% 3. Detrend (takes a while)
  
 NUM_CORES = 12;
