@@ -8,14 +8,14 @@
 
 %% 1. Import raw data 
 
- [raw, ~, ~, ~]=read_Intan_RHS2000_file;
- clear amplifier_channels amp_settle_data charge_recovery_data compliance_limit_data stim_data t 
+[raw, ~, ~, ~]=read_Intan_RHS2000_file;
+clear amplifier_channels amp_settle_data charge_recovery_data compliance_limit_data stim_data t 
  
  %%  2. Channel mean subtraction 
- 
- mean_sg = mean(raw);
- raw = raw - mean_sg; clear mean_sg
- 
+
+mean_sg = mean(raw);
+raw = raw - mean_sg; clear mean_sg
+
  %% 3. Detrend (takes a while)
  
 NUM_CORES = 12;
@@ -61,8 +61,8 @@ clear raw;
 
  %% 4. Blank and interpolate 
  
- load('sorted_TS_current.mat');
- timestamps = sort(sorted_TS_current(:,1));
+load('sorted_TS_current.mat');
+timestamps = sort(sorted_TS_current(:,1));
  
 
 copy = new_data;
