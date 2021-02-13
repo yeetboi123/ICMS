@@ -178,28 +178,28 @@ if __name__ == "__main__":
     samplerate = int(3e4)
     freq_min = 250
     freq_max = 6000
+    data_dir = '../ephys_preprocessing/'
     
-    raw_data_ch1 = np.asarray(sio.loadmat('raw_data_ch1.mat')['raw_data_ch1'])
-    mdaio.writemda32(raw_data_ch1,'raw_data_ch1.mda')
-    timeseries = 'raw_data_ch1.mda'
-    timeseries_out = 'filtered_raw_data_ch1.mda'
+    
+    raw_data_ch1 = np.asarray(sio.loadmat(os.path.join(data_dir,'raw_data_ch1.mat'))['data'])
+    mdaio.writemda32(raw_data_ch1,os.path.join(data_dir,'raw_data_ch1.mda'))
+    timeseries = os.path.join(data_dir,'raw_data_ch1.mda')
+    timeseries_out = os.path.join(data_dir,'filtered_raw_data_ch1.mda')
     bandpass_filter(timeseries, timeseries_out, samplerate, freq_min, freq_max)
-    filtered_data = mdaio.readmda('filtered_raw_data_ch1.mda')
+    filtered_data = mdaio.readmda(os.path.join(data_dir,'filtered_raw_data_ch1.mda'))
     
-    detrended_data_ch1 = np.transpose(np.asarray(sio.loadmat('detrended_data_ch1.mat')['detrended_data_ch1']))
-    mdaio.writemda32(detrended_data_ch1,'detrended_data_ch1.mda')
-    timeseries = 'detrended_data_ch1.mda'
-    timeseries_out = 'filtered_detrended_data_ch1.mda'
+    detrended_data_ch1 = np.asarray(sio.loadmat(os.path.join(data_dir,'detrended_data_ch1.mat'))['copy'])
+    mdaio.writemda32(detrended_data_ch1,os.path.join(data_dir,'detrended_data_ch1.mda'))
+    timeseries = os.path.join(data_dir,'detrended_data_ch1.mda')
+    timeseries_out = os.path.join(data_dir,'filtered_detrended_data_ch1.mda')
     bandpass_filter(timeseries, timeseries_out, samplerate, freq_min, freq_max)
-    filtered_data_detrended = mdaio.readmda('filtered_detrended_data_ch1.mda')
+    filtered_data_detrended = mdaio.readmda(os.path.join(data_dir,'filtered_detrended_data_ch1.mda'))
     
-    
-
-    # plt.plot(raw_data_ch1[0,:],label='raw')
-    # plt.plot(filtered_data[0,:],label='filtered')
-    
-    plt.plot(detrended_data_ch1[0,:],label='raw_detrended')
+    plt.plot(raw_data_ch1[0, :], label='raw')
     plt.plot(filtered_data_detrended[0,:],label='filtered_detrended')
+
+    # plt.plot(detrended_data_ch1[0, :], label='raw_detrended')
+    # plt.plot(filtered_data_detrended[0,:],label='filtered_detrended')
     plt.legend()
     plt.show()
     
