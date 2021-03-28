@@ -2,6 +2,7 @@
 
 % Original data presents rows with native channel names ordered by ports
 function [raw,stim_data,new_order,stim_new_order,t,save_path] = createMappingNEW
+% createMapping
 % (A,B,C,D)
 
 % Convert these port order names to 128-channel order names to find that

@@ -9,7 +9,8 @@ transform_data = @nestedfun1;
     
     preprocessed_data = preprocessData('lpf');
     transformed_data = nestedfun1('preprocess',3,2);
-
+    importedFunction()
+    
     switch nargout 
         case 3
             varargout{1} = data;
