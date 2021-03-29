@@ -5,6 +5,8 @@ function varargout = loadData()
 if nargout == 5
     % This is the data from the read_Intan_RHS2000 function     
     [raw,amplifier_channels,stim_data,t]=read_Intan_RHS2000_file;
+    clear amp_settle_data charge_recovery_data compliance_limit_data...
+    spike_triggers frequency_parameters notes reference_channel stim_parameters
     port_number = [amplifier_channels.port_number];
     native_order = [amplifier_channels.native_order]+1;
     enabled_ch_names = {amplifier_channels(:).native_channel_name}';

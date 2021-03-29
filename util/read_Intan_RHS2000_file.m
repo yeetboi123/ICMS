@@ -603,7 +603,7 @@ function move_to_base_workspace(variable)
 % user will have access to it after the program ends.
 
 variable_name = inputname(1);
-assignin('base', variable_name, variable);
+% assignin('base', variable_name, variable);
 
 return;
 
