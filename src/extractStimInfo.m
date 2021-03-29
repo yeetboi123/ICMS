@@ -1,8 +1,13 @@
-function [stim_info, extraInfo] = extractStimInfo(stim_data)
+function [stim_info, extraInfo] = extractStimInfo(stim_data,t)
 
-    [~,t]=find(stim_data ~= 0);
-    tt=unique(t); cth_phz = tt(1:6:end);
-
+    [~,col]=find(stim_data ~= 0);
+    tt=unique(col); 
+    if tt(1) == 1 % stim pulse at sample 1 can occur
+        cth_phz = tt(2:6:end);
+    else
+        cth_phz = tt(1:6:end);
+    end
+    
     stim_info = cell(3,numel(cth_phz));
     for k = 1:numel(cth_phz)
         stim_time = cth_phz(k);
@@ -16,6 +21,16 @@ function [stim_info, extraInfo] = extractStimInfo(stim_data)
     changes = nnz(diff(stimmersPerPulse));
     STIM_IDX_BEFORE_CHANGE = find(abs(diff(stimmersPerPulse))==1);
     
+    % check to make sure number of trials == number of stim pulses
+    try 
+        TRIAL_NUM = numel(find(t == 0)); 
+        STIM_NUM = numel(cth_phz);
+        assert(TRIAL_NUM == STIM_NUM);
+    catch 
+        error('Different number of trials (%d) and stimulation pulses (%d)! Faulty data acquisition!',...
+            TRIAL_NUM,STIM_NUM')
+    end
+    
     switch changes
         case 0
             if stimmersPerPulse(1) == 1
@@ -26,16 +41,15 @@ function [stim_info, extraInfo] = extractStimInfo(stim_data)
                     disp('Identical number of pulses per single stim channel!')
                     fprintf('%d pulses per stim channel!\n', counts(1))
                 else
-                    disp('Differenet number of pulses per single stim channel! Faulty data acquisition!')
                     fprintf('%d pulses for stim channel %d!\n', [counts;stimch])
                     fprintf('\n')
+                    error('Different number of pulses per single stim channel! Faulty data acquisition!')
                 end
             elseif stimmersPerPulse(1) == 2
                 stimType = 'paired';
                 disp('Paired stimulation only file detected!');
             else
-                stimType = 'error';
-                disp('Error! More than 2 stimulation pulses in trials! Faulty data acquisition!');
+                error('Error! More than 2 stimulation pulses in trials! Faulty data acquisition!');
             end
         case 1
             if stimmersPerPulse(1) == 1
@@ -46,27 +60,26 @@ function [stim_info, extraInfo] = extractStimInfo(stim_data)
                     disp('Identical number of pulses per single stim channel!');
                     fprintf('%d pulses per stim channel!\n', counts(1))
                 else
-                    disp('Different number of pulses per single stim channel! Faulty data acquisition!');
                     fprintf('%d pulses for stim channel %d!\n', [counts;stimch])
                     fprintf('\n')
+                    error('Different number of pulses per single stim channel! Faulty data acquisition!');   
                 end
             elseif stimmersPerPulse(1) == 2
                 stimType = 'error';
-                disp('Error! Paired stim trials before single stim trials!');
+                warning('Warning! Paired stim trials before single stim trials!');
                 [counts,stimch] = groupcounts([stim_info{1,STIM_IDX_BEFORE_CHANGE+1:end}]');
                 if all(counts == counts(1))
                     disp('Identical number of pulses per single stim channel!')
                     fprintf('%d pulses per stim channel!\n', counts(1))
                 else
-                    disp('Differenet number of pulses per single stim channel! Faulty data acquisition!')                
+                    warning('Different number of pulses per single stim channel! Faulty data acquisition!')                
                     fprintf('%d pulses for stim channel %d!\n', [counts;stimch])
                     fprintf('\n')
                 end
                     
             end
         otherwise
-            stimType = 'error';
-            disp('Error! Mixed stim trial types detected! Faulty data acquisition!\n');
+            error('Error! Mixed stim trial types detected! Faulty data acquisition!');
     end
      
     extraInfo.stimType = stimType;

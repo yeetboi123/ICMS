@@ -2,7 +2,7 @@ function varargout = loadData()
 %loadData loads extracellular neural recording data and enabled channel indices 
 
 %   loadData() reads an Intan.rhs file and outputs relevant files
-if nargout == 5
+if nargout > 2
     % This is the data from the read_Intan_RHS2000 function     
     [raw,amplifier_channels,stim_data,t]=read_Intan_RHS2000_file;
     clear amp_settle_data charge_recovery_data compliance_limit_data...

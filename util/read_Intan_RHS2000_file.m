@@ -461,16 +461,16 @@ if (num_amplifier_channels > 0)
     move_to_base_workspace(amplifier_channels);
     if (data_present)
         move_to_base_workspace(amplifier_data);
-        if (dc_amp_data_saved ~= 0)
-            move_to_base_workspace(dc_amplifier_data);
-        end
+%         if (dc_amp_data_saved ~= 0)
+%             move_to_base_workspace(dc_amplifier_data);
+%         end
         move_to_base_workspace(stim_data);
-        move_to_base_workspace(amp_settle_data);
-        move_to_base_workspace(charge_recovery_data);
-        move_to_base_workspace(compliance_limit_data);
+%         move_to_base_workspace(amp_settle_data);
+%         move_to_base_workspace(charge_recovery_data);
+%         move_to_base_workspace(compliance_limit_data);
         move_to_base_workspace(t);
     end
-    move_to_base_workspace(spike_triggers);
+%     move_to_base_workspace(spike_triggers);
 end
 if (num_board_adc_channels > 0)
     move_to_base_workspace(board_adc_channels);
@@ -478,12 +478,12 @@ if (num_board_adc_channels > 0)
         move_to_base_workspace(board_adc_data);
     end
 end
-if (num_board_dac_channels > 0)
-    move_to_base_workspace(board_dac_channels);
-    if (data_present)
-        move_to_base_workspace(board_dac_data);
-    end
-end
+% if (num_board_dac_channels > 0)
+%     move_to_base_workspace(board_dac_channels);
+%     if (data_present)
+%         move_to_base_workspace(board_dac_data);
+%     end
+% end
 if (num_board_dig_in_channels > 0)
     move_to_base_workspace(board_dig_in_channels);
     if (data_present)
