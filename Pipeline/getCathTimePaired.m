@@ -20,11 +20,13 @@ current_arr = {};
 time_arr = {};
 for i = 1:numel(cathodes)
     cath = cathodes(i);
-    stim_times = find(stim_data(cath,:) < 0);
-    phaseBegin = [1 (find(diff(stim_times) > 1) + 1)];
-    phaseBegin = stim_times(phaseBegin);
+    cth_phz = find(stim_data(cath,:) < 0);
+    phaseBegin = [1 (find(diff(cth_phz) > 1) + 1)];
+    phaseBegin = cth_phz(phaseBegin);
     time_arr{i} = phaseBegin;
     current_arr{i} = -stim_data(cath,phaseBegin);
 end
+
+a=sort(unique(cell2mat(time_arr)));
 
 end
