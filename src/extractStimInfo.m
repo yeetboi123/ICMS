@@ -37,6 +37,7 @@ function [stim_info, extraInfo] = extractStimInfo(stim_data,t)
                 stimType = 'single';
                 disp('Single stimulation only file detected!');
                 [counts,stimch] = groupcounts([stim_info{1,1:end}]');
+                stim_info = cell2mat(stim_info);
                 if all(counts == counts(1))
                     disp('Identical number of pulses per single stim channel!')
                     fprintf('%d pulses per stim channel!\n', counts(1))

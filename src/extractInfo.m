@@ -1,4 +1,4 @@
-function [channelInfo,stimInfo,extraInfo] = extractInfo(raw, enabled_ch_names, new_order, stim_data, t, processing_path)
+function [channelInfo,stimInfo,extraInfo] = extractInfo(enabled_ch_names, new_order, stim_data, t, processing_path)
 %extractInfo uses the outputs from loadData to produce intermediate files 
 
 % extractInfo uses loaded data to create intermediate files that will be
@@ -19,7 +19,6 @@ if strcmp(stimType,'error')
     return
 end
     
-
 % Write and save channel_info structure 
 allRowIdx = (1:numel(new_order))';
 channelInfo.allCh.allRowIdx = allRowIdx;
@@ -28,7 +27,7 @@ channelInfo.allCh.allChNames = enabled_ch_names;
 channelInfo.allCh.allChLocations = num2cell(coords_of_interest);
 
 if strcmp(stimType,'single')
-    singleRowIdx = unique(cell2mat(stimInfo(1,:)));
+    singleRowIdx = unique(stimInfo(1,:));
     channelInfo.singleStimCh.singleRowIdx = singleRowIdx;
     channelInfo.singleStimCh.single128OrderIdx = new_order(singleRowIdx);
     channelInfo.singleStimCh.singleChNames = enabled_ch_names(singleRowIdx);
@@ -57,16 +56,16 @@ else
 
 end
 
-checkpoint_data.raw = raw;
-checkpoint_data.enabled_ch_names = enabled_ch_names;
-checkpoint_data.new_order = new_order;
-checkpoint_data.stim_data = stim_data;
-checkpoint_data.t = t;
-checkpoint_data.processing_path = processing_path;
-checkpoint_data.channelInfo = channelInfo;
-checkpoint_data.stimInfo = stimInfo;
-checkpoint_data.extraInfo = extraInfo;
-move_to_base_workspace(checkpoint_data); 
+% checkpoint_data.raw = raw;
+% checkpoint_data.enabled_ch_names = enabled_ch_names;
+% checkpoint_data.new_order = new_order;
+% checkpoint_data.stim_data = stim_data;
+% checkpoint_data.t = t;
+% checkpoint_data.processing_path = processing_path;
+% checkpoint_data.channelInfo = channelInfo;
+% checkpoint_data.stimInfo = stimInfo;
+% checkpoint_data.extraInfo = extraInfo;
+% move_to_base_workspace(checkpoint_data); 
 
 save(fullfile(processing_path,'channelInfo.mat'),'channelInfo');
 save(fullfile(processing_path,'stimInfo.mat'),'stimInfo');

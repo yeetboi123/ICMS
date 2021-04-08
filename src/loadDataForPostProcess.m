@@ -1,4 +1,4 @@
-function [channelInfo,stimInfo,stimPulseArrs,primaryCh_vec,timeStamp_samples,unit_vec]     loadDataForPostProcess(processing_path)
+function [channelInfo,stimInfo,stimPulseArrs,primaryCh_vec,timeStamp_samples,unit_vec] = loadDataForPostProcess(processing_path)
 
     addpath(processing_path)
     

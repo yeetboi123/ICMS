@@ -1,12 +1,12 @@
-function detrended = detrendData(raw,stimInfo,t,processing_path)
+function detrended = detrendData2(input_data,stimInfo,t,nSamples,processing_path)
     addpath util\NoiseTools 
     addpath util\mdaio
-    
+
     c = parcluster('local');
     NUM_CORES = c.NumWorkers;
     
     if iscell(stimInfo); stim_times = cell2mat(stimInfo(2,:)); else; stim_times = stimInfo(2,:); end
-
+    
     L = numel(stim_times);
     INTERVALS_PER_CORE = max([floor(L/NUM_CORES) 1]); % at least 1 interval/core
     REMAINING_INTERVALS = L - (NUM_CORES - 1) * INTERVALS_PER_CORE;
@@ -23,13 +23,13 @@ function detrended = detrendData(raw,stimInfo,t,processing_path)
         sum(interval_assignments), L)
     
     dsc_times = find(t == 0); dsc_times = dsc_times(2:end);    
-    detrended = zeros(size(raw,1),size(raw,2));
+    detrended = zeros(size(input_data,1),size(input_data,2));
 
-    for CH_IND = 1:size(raw,1)
+    for CH_IND = 1:size(input_data,1)
 
         tic
         fprintf('Detrending channel %d...',CH_IND)
-        sample = raw(CH_IND,1:end);
+        sample = input_data(CH_IND,1:end);
 
         % break up data into segments for parallel processing
         data_arr = cell(NUM_CORES,1);
@@ -66,16 +66,16 @@ function detrended = detrendData(raw,stimInfo,t,processing_path)
 
             for i = 1:IPC
                 if seg == NUM_CORES && i == IPC
-                    chunk1 = segment(norm_stim_times(i)+30:end);
-                    y1 = beginBlank(chunk1);
-                    ys = [ys y1'];
+                    chunk1 = segment(norm_stim_times(i)+nSamples:end);
+                    y1 = nt_detrend(chunk1',5,[],[],[],[],60);
+                    ys = [ys zeros(1,nSamples) y1'];
                 else
-                    chunk1 = segment(norm_stim_times(i)+30:norm_dsc_times(i)-1); 
+                    chunk1 = segment(norm_stim_times(i)+nSamples:norm_dsc_times(i)-1); 
                     chunk2 = segment(norm_dsc_times(i):norm_stim_times(i+1)-1);
-                    y1 = beginBlank(chunk1);
+                    y1 = nt_detrend(chunk1',5,[],[],[],[],60);
                     y2 = nt_detrend(chunk2',5,[],[],[],[],60);
                     y2(1:15) = ones(1,15);
-                    ys = [ys y1' y2'];
+                    ys = [ys zeros(1,nSamples) y1' y2'];
                 end
             end
             
@@ -83,9 +83,6 @@ function detrended = detrendData(raw,stimInfo,t,processing_path)
         end
         combined = cell2mat(new_sample);
         
-%         plot(detrended(48,1e6:3e6));
-%         hold on;
-%         plot(raw(48,1e6:3e6));
 
         detrended(CH_IND,:) = [zeros(1,stim_times(1)-1) combined];
         toc

@@ -1,11 +1,11 @@
-function arrs = makeStimPulseArrays(channelInfo,stimInfo,extraInfo,processing_path)
+function stimPulseArrs = makeStimPulseArrays(channelInfo,stimInfo,extraInfo,processing_path)
 %UNTITLED6 Summary of this function goes here
 %   Detailed explanation goes here
 stimIdxBeforeChange = extraInfo.stimIdxBeforeChange;
 stimType = extraInfo.stimType;
 
 if strcmp(stimType,'single')
-    single_stim_info = cell2mat(stimInfo);
+    single_stim_info = stimInfo;
 elseif strcmp(stimType,'paired')
     paired_stim_info = stimInfo;
 else
@@ -44,7 +44,7 @@ if strcmp(stimType,'single') || strcmp(stimType,'combined')
 %                 end                
         end
     end
-    arrs.singleStimPulseArr = singleStimPulseArr;
+    stimPulseArrs.singleStimPulseArr = singleStimPulseArr;
 end
 
 % ts = singleStimPulseArr{2,2}
@@ -71,11 +71,11 @@ if strcmp(stimType,'paired') || strcmp(stimType,'combined')
                 pairedStimPulseArr{i,j} = getStimPulse(stim_ch,stim_current);
         end
     end
-    arrs.pairedStimPulseArr = pairedStimPulseArr;
+    stimPulseArrs.pairedStimPulseArr = pairedStimPulseArr;
 end
 
 % ts = pairedStimPulseArr{5,4}
 % plot(stim_data(paired_stim_row_idx(5,:),ts(1)-100:ts(1)+100)')
-save(fullfile(processing_path,'stimPulseArrs.mat'),'arrs');
+save(fullfile(processing_path,'stimPulseArrs.mat'),'-struct','stimPulseArrs');
 
 end

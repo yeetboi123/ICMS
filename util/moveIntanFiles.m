@@ -1,7 +1,7 @@
 D = uigetdir('Choose directory with files you want to move');
 S = dir(fullfile(D,'*'));
 N = setdiff({S([S.isdir]).name},{'.','..'}); % List of subfolders of D.
-new_path = 'E:\ICMS18\Mar26_ICMS18_ELEC\allSingle';
+new_path = 'E:\ICMS15\Mar31_ICMS15_ELEC\allSingle';
 mkdir(new_path)
 % new_path = 'E:\ICMS15\Mar26_ICMS15_ELEC\pairedTest';
 for ii = 1:numel(N)
